@@ -27,7 +27,11 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # Шаг 4: Собираем и пушим Docker-образ на srv
+      # ШАГ 4: Устанавливаем и настраиваем Buildx
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # Шаг 5: Собираем и пушим Docker-образ на srv
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
