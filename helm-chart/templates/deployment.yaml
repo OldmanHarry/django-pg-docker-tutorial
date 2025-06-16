@@ -14,11 +14,15 @@ spec:
       labels:
         {{- include "helm-chart.selectorLabels" . | nindent 8 }}
     spec:
+      initContainers:
+      - name: wait-for-postgres
+        image: busybox:1.28
+        command: ['sh', '-c', 'until nc -z db 5432; do echo "waiting for postgres"; sleep 2; done;']
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.app.image.repository }}:{{ .Values.app.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.app.image.pullPolicy }}
-          command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+          command: ["sh", "-c", "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"]
           ports:
             - name: http
               containerPort: 8000
@@ -30,9 +34,13 @@ spec:
             httpGet:
               path: /
               port: http
+            initialDelaySeconds: 15
+            periodSeconds: 20
           readinessProbe:
             httpGet:
               path: /
               port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
           resources:
             {{- toYaml .Values.app.resources | nindent 12 }}
