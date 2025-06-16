@@ -19,5 +19,6 @@ spec:
           imagePullPolicy: {{ .Values.app.image.pullPolicy }}
           ports:
             - containerPort: 8000
+          command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
           env:
             {{- toYaml .Values.app.env | nindent 16 }}
