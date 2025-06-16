@@ -23,21 +23,6 @@ spec:
             - name: http
               containerPort: 8000
               protocol: TCP
-          env:
-            - name: SQL_ENGINE
-              value: "django.db.backends.postgresql"
-            - name: SQL_DATABASE
-              value: "postgres"
-            - name: SQL_USER
-              value: "postgres"
-            - name: SQL_PASSWORD
-              value: "postgres"
-            - name: SQL_HOST
-              value: "postgres-service"
-            - name: SQL_PORT
-              value: "5432"
-            - name: DATABASE
-              value: "postgres"
           livenessProbe:
             httpGet:
               path: /
