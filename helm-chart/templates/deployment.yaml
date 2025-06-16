@@ -17,8 +17,21 @@ spec:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.app.image.repository }}:{{ .Values.app.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.app.image.pullPolicy }}
-          ports:
+ports:
             - containerPort: 8000
           command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
           env:
-            {{- toYaml .Values.app.env | nindent 16 }}
+            - name: SQL_ENGINE
+              value: "django.db.backends.postgresql"
+            - name: SQL_DATABASE
+              value: "postgres"
+            - name: SQL_USER
+              value: "postgres"
+            - name: SQL_PASSWORD
+              value: "postgres"
+            - name: SQL_HOST
+              value: "postgres-service"
+            - name: SQL_PORT
+              value: "5432"
+            - name: DATABASE
+              value: "postgres"
