@@ -36,18 +36,24 @@ spec:
               value: "postgres"
             - name: DB_PASS
               value: "postgres"
-            - name: DJANGO_ALLOWED_HOSTS
+            - name: DJANGO_ALLOWED_HOSTS # 
               value: "*"
           livenessProbe:
             httpGet:
               path: /
               port: http
+              httpHeaders: # --- ДОБАВЛЕННЫЙ БЛОК ---
+              - name: Host
+                value: "localhost" # --- разрешенный хост ---
             initialDelaySeconds: 15
             periodSeconds: 20
           readinessProbe:
             httpGet:
               path: /
               port: http
+              httpHeaders: # --- ДОБАВЛЕННЫЙ БЛОК ---
+              - name: Host
+                value: "localhost"
             initialDelaySeconds: 5
             periodSeconds: 10
           resources:
