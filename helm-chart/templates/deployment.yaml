@@ -17,7 +17,7 @@ spec:
       initContainers:
       - name: wait-for-postgres
         image: busybox:1.28
-        command: ['sh', '-c', 'until nc -z db 5432; do echo "waiting for postgres"; sleep 2; done;']
+        command: ['sh', '-c', 'until nc -z postgres-service 5432; do echo "waiting for postgres"; sleep 2; done;']
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.app.image.repository }}:{{ .Values.app.image.tag | default .Chart.AppVersion }}"
@@ -28,8 +28,14 @@ spec:
               containerPort: 8000
               protocol: TCP
           env:
-            - name: DATABASE_URL
-              value: "postgres://postgres:postgres@db:5432/postgres"
+            - name: DB_HOST
+              value: "postgres-service"
+            - name: DB_NAME
+              value: "postgres"
+            - name: DB_USER
+              value: "postgres"
+            - name: DB_PASS
+              value: "postgres"
           livenessProbe:
             httpGet:
               path: /
