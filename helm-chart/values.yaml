@@ -1,0 +1,49 @@
+# Переменные для Django-приложения
+app:
+  replicaCount: 1
+  image:
+    repository: oldmanharry007/django-app 
+    pullPolicy: IfNotPresent
+    # tag будет передаваться из CI/CD
+    tag: ""
+
+  service:
+    type: NodePort
+    port: 8000
+    # 
+    nodePort: 30080
+
+  # Переменные окружения для Django
+  # 
+  env:
+    - name: SQL_ENGINE
+      value: "django.db.backends.postgresql"
+    - name: SQL_DATABASE
+      value: "postgres"
+    - name: SQL_USER
+      value: "postgres"
+    - name: SQL_PASSWORD
+      value: "postgres"
+    - name: SQL_HOST
+      # Имя сервиса 
+      value: "postgres-service"
+    - name: SQL_PORT
+      value: "5432"
+    - name: DATABASE
+      value: "postgres"
+
+# Переменные для PostgreSQL
+postgres:
+  image:
+    repository: postgres
+    tag: "13-alpine"
+  
+  service:
+    port: 5432
+
+  # Настройки для персистентного хранения данных
+  persistence:
+    enabled: true
+    size: 1Gi
+    # StorageClass по умолчанию
+    storageClass: ""
