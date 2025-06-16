@@ -23,6 +23,9 @@ spec:
             - name: http
               containerPort: 8000
               protocol: TCP
+          env:
+            - name: DATABASE_URL
+              value: "postgres://postgres:postgres@db:5432/postgres"
           livenessProbe:
             httpGet:
               path: /
